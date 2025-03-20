@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserPaymentInfo {
+public class UserPaymentInfoEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
