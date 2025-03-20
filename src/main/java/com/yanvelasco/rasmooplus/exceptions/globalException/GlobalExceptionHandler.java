@@ -1,6 +1,9 @@
 package com.yanvelasco.rasmooplus.exceptions.globalException;
 
-import com.yanvelasco.notes_api.exceptions.*;
+import com.yanvelasco.rasmooplus.exceptions.AlreadyExistsException;
+import com.yanvelasco.rasmooplus.exceptions.IsEmptyException;
+import com.yanvelasco.rasmooplus.exceptions.ResourceNotFoundException;
+import com.yanvelasco.rasmooplus.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -49,12 +52,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> isEmptyException(IsEmptyException e) {
         String message = e.getMessage();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(message);
-    }
-
-    @ExceptionHandler(InvalidJWTAuthenticationException.class)
-    public ResponseEntity<String> invalidJWTAuthenticationException(InvalidJWTAuthenticationException e) {
-        String message = e.getMessage();
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(message);
     }
 
 }
