@@ -1,4 +1,4 @@
-package com.yanvelasco.rasmooplus.model;
+package com.yanvelasco.rasmooplus.model.entities;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserType {
+public class UserTypeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
