@@ -44,12 +44,12 @@ public class UserEntity implements Serializable {
     @Column(name = "dt_expiration", nullable = false)
     private LocalDate dtExpiration;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_type_id")
-    private UserTypeEntity userTypeId;
+    private UserTypeEntity userType;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subscriptions_type_id")
-    private SubscriptionTypeEntity subscriptionTypeId;
+    private SubscriptionTypeEntity subscriptionType;
 
 }
