@@ -1,8 +1,10 @@
 package com.yanvelasco.rasmooplus.model.controllers;
 
+import com.yanvelasco.rasmooplus.model.dto.SubscriptionTypeDTO;
 import com.yanvelasco.rasmooplus.model.entities.SubscriptionTypeEntity;
 import com.yanvelasco.rasmooplus.model.services.SubscriptionTypeEntityService;
 import com.yanvelasco.rasmooplus.model.services.impl.SubscriptionTypeEntityServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,14 +31,14 @@ public class SubscriptionTypeEntityController {
     }
 
     @PostMapping
-    public ResponseEntity<SubscriptionTypeEntity> create(@RequestBody SubscriptionTypeEntity subscriptionTypeEntity) {
-        return subscriptionTypeEntityService.create(subscriptionTypeEntity);
+    public ResponseEntity<SubscriptionTypeEntity> create(@RequestBody @Valid SubscriptionTypeDTO subscriptionTypeDTO) {
+        return subscriptionTypeEntityService.create(subscriptionTypeDTO);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<SubscriptionTypeEntity> update(@PathVariable Long id,
-                                                         @RequestBody SubscriptionTypeEntity subscriptionTypeEntity) {
-        return subscriptionTypeEntityService.update(id, subscriptionTypeEntity);
+                                                         @RequestBody @Valid SubscriptionTypeDTO subscriptionTypeDTO) {
+        return subscriptionTypeEntityService.update(id, subscriptionTypeDTO);
     }
 
     @DeleteMapping("/{id}")
