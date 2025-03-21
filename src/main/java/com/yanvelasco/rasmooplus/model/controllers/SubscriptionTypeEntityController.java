@@ -1,6 +1,7 @@
 package com.yanvelasco.rasmooplus.model.controllers;
 
 import com.yanvelasco.rasmooplus.model.dto.SubscriptionTypeDTO;
+import com.yanvelasco.rasmooplus.model.dto.SubscriptionTypeUpdateDTO;
 import com.yanvelasco.rasmooplus.model.entities.SubscriptionTypeEntity;
 import com.yanvelasco.rasmooplus.model.services.SubscriptionTypeEntityService;
 import com.yanvelasco.rasmooplus.model.services.impl.SubscriptionTypeEntityServiceImpl;
@@ -37,8 +38,8 @@ public class SubscriptionTypeEntityController {
 
     @PutMapping("/{id}")
     public ResponseEntity<SubscriptionTypeEntity> update(@PathVariable Long id,
-                                                         @RequestBody @Valid SubscriptionTypeDTO subscriptionTypeDTO) {
-        return subscriptionTypeEntityService.update(id, subscriptionTypeDTO);
+                                                         @RequestBody @Valid SubscriptionTypeUpdateDTO subscriptionTypeUpdateDTO) {
+        return subscriptionTypeEntityService.update(id, subscriptionTypeUpdateDTO);
     }
 
     @DeleteMapping("/{id}")

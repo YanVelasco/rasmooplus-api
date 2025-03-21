@@ -33,7 +33,7 @@ public class SubscriptionTypeEntity implements Serializable {
     @Column(name = "price", nullable = false)
     private BigDecimal price;
 
-    @Column(name = "product_key", nullable = false)
+    @Column(name = "product_key", nullable = false, unique = true)
     private String productKey;
 
 }

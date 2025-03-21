@@ -1,6 +1,7 @@
 package com.yanvelasco.rasmooplus.model.services;
 
 import com.yanvelasco.rasmooplus.model.dto.SubscriptionTypeDTO;
+import com.yanvelasco.rasmooplus.model.dto.SubscriptionTypeUpdateDTO;
 import com.yanvelasco.rasmooplus.model.entities.SubscriptionTypeEntity;
 import org.springframework.http.ResponseEntity;
 
@@ -13,7 +14,7 @@ public interface SubscriptionTypeEntityService {
 
     ResponseEntity<SubscriptionTypeEntity> create(SubscriptionTypeDTO subscriptionTypeDTO);
 
-    ResponseEntity<SubscriptionTypeEntity> update(Long id, SubscriptionTypeDTO subscriptionTypeDTO);
+    ResponseEntity<SubscriptionTypeEntity> update(Long id, SubscriptionTypeUpdateDTO subscriptionTypeUpdateDTO);
 
     ResponseEntity<Void> delete(Long id);
 
