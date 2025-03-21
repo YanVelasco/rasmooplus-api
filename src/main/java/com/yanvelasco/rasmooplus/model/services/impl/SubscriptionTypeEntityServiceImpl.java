@@ -72,6 +72,7 @@ public class SubscriptionTypeEntityServiceImpl implements SubscriptionTypeEntity
         subscriptionTypeRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Subscription type", "id", id)
         );
+        subscriptionTypeRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
 
