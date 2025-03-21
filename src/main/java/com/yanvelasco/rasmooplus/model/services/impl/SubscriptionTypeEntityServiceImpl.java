@@ -3,6 +3,7 @@ package com.yanvelasco.rasmooplus.model.services.impl;
 import com.yanvelasco.rasmooplus.exceptions.IsEmptyException;
 import com.yanvelasco.rasmooplus.exceptions.ResourceNotFoundException;
 import com.yanvelasco.rasmooplus.model.dto.SubscriptionTypeDTO;
+import com.yanvelasco.rasmooplus.model.dto.SubscriptionTypeUpdateDTO;
 import com.yanvelasco.rasmooplus.model.entities.SubscriptionTypeEntity;
 import com.yanvelasco.rasmooplus.model.repositories.SubscriptionTypeRepository;
 import com.yanvelasco.rasmooplus.model.services.SubscriptionTypeEntityService;
@@ -51,18 +52,19 @@ public class SubscriptionTypeEntityServiceImpl implements SubscriptionTypeEntity
         return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionTypeEntity);
     }
 
-    @Override
-    public ResponseEntity<SubscriptionTypeEntity> update(Long id, SubscriptionTypeDTO subscriptionTypeDTO) {
-        subscriptionTypeRepository.findById(id).orElseThrow(
+   @Override
+    public ResponseEntity<SubscriptionTypeEntity> update(Long id, SubscriptionTypeUpdateDTO subscriptionTypeUpdateDTO) {
+        var subscribeEntity = subscriptionTypeRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Subscription type", "id", id)
         );
-        var subscriptionTypeEntity = SubscriptionTypeEntity.builder()
-                .name(subscriptionTypeDTO.name())
-                .accessMonths(subscriptionTypeDTO.accessMonths())
-                .price(subscriptionTypeDTO.price())
-                .productKey(subscriptionTypeDTO.productKey())
+        var update = SubscriptionTypeEntity.builder()
+                .id(subscribeEntity.getId())
+                .name(subscriptionTypeUpdateDTO.name() != null ? subscriptionTypeUpdateDTO.name() : subscribeEntity.getName())
+                .accessMonths(subscriptionTypeUpdateDTO.accessMonths() != null ? subscriptionTypeUpdateDTO.accessMonths() : subscribeEntity.getAccessMonths())
+                .price(subscriptionTypeUpdateDTO.price() != null ? subscriptionTypeUpdateDTO.price() : subscribeEntity.getPrice())
+                .productKey(subscriptionTypeUpdateDTO.productKey() != null ? subscriptionTypeUpdateDTO.productKey() : subscribeEntity.getProductKey())
                 .build();
-        return ResponseEntity.status(HttpStatus.OK).body(subscriptionTypeEntity);
+        return ResponseEntity.status(HttpStatus.OK).body(update);
     }
 
     @Override
