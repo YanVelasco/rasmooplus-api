@@ -2,6 +2,7 @@ package com.yanvelasco.rasmooplus.model.services.impl;
 
 import com.yanvelasco.rasmooplus.exceptions.IsEmptyException;
 import com.yanvelasco.rasmooplus.exceptions.ResourceNotFoundException;
+import com.yanvelasco.rasmooplus.model.dto.SubscriptionTypeDTO;
 import com.yanvelasco.rasmooplus.model.entities.SubscriptionTypeEntity;
 import com.yanvelasco.rasmooplus.model.repositories.SubscriptionTypeRepository;
 import com.yanvelasco.rasmooplus.model.services.SubscriptionTypeEntityService;
@@ -38,16 +39,29 @@ public class SubscriptionTypeEntityServiceImpl implements SubscriptionTypeEntity
     }
 
     @Override
-    public ResponseEntity<SubscriptionTypeEntity> create(SubscriptionTypeEntity subscriptionTypeEntity) {
+    public ResponseEntity<SubscriptionTypeEntity> create(SubscriptionTypeDTO subscriptionTypeDTO) {
+        var subscriptionTypeEntity = SubscriptionTypeEntity.builder()
+                .name(subscriptionTypeDTO.name())
+                .accessMonths(subscriptionTypeDTO.accessMonths())
+                .price(subscriptionTypeDTO.price())
+                .productKey(subscriptionTypeDTO.productKey())
+                .build();
+
         subscriptionTypeRepository.save(subscriptionTypeEntity);
         return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionTypeEntity);
     }
 
     @Override
-    public ResponseEntity<SubscriptionTypeEntity> update(Long id, SubscriptionTypeEntity subscriptionTypeEntity) {
+    public ResponseEntity<SubscriptionTypeEntity> update(Long id, SubscriptionTypeDTO subscriptionTypeDTO) {
         subscriptionTypeRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Subscription type", "id", id)
         );
+        var subscriptionTypeEntity = SubscriptionTypeEntity.builder()
+                .name(subscriptionTypeDTO.name())
+                .accessMonths(subscriptionTypeDTO.accessMonths())
+                .price(subscriptionTypeDTO.price())
+                .productKey(subscriptionTypeDTO.productKey())
+                .build();
         return ResponseEntity.status(HttpStatus.OK).body(subscriptionTypeEntity);
     }
 
