@@ -5,6 +5,7 @@ import com.yanvelasco.rasmooplus.exceptions.ResourceNotFoundException;
 import com.yanvelasco.rasmooplus.model.dto.SubscriptionTypeDTO;
 import com.yanvelasco.rasmooplus.model.dto.SubscriptionTypeUpdateDTO;
 import com.yanvelasco.rasmooplus.model.entities.SubscriptionTypeEntity;
+import com.yanvelasco.rasmooplus.model.mapper.SubscriptionTypeMapper;
 import com.yanvelasco.rasmooplus.model.repositories.SubscriptionTypeRepository;
 import com.yanvelasco.rasmooplus.model.services.SubscriptionTypeEntityService;
 import org.springframework.http.HttpStatus;
@@ -17,13 +18,16 @@ import java.util.List;
 public class SubscriptionTypeEntityServiceImpl implements SubscriptionTypeEntityService {
 
     private final SubscriptionTypeRepository subscriptionTypeRepository;
+    private final SubscriptionTypeMapper subscriptionTypeMapper;
 
-    public SubscriptionTypeEntityServiceImpl(SubscriptionTypeRepository subscriptionTypeRepository) {
+    public SubscriptionTypeEntityServiceImpl(SubscriptionTypeRepository subscriptionTypeRepository,
+                                             SubscriptionTypeMapper subscriptionTypeMapper) {
         this.subscriptionTypeRepository = subscriptionTypeRepository;
+        this.subscriptionTypeMapper = subscriptionTypeMapper;
     }
 
     @Override
-    public ResponseEntity<List<SubscriptionTypeEntity>> findAll(){
+    public ResponseEntity<List<SubscriptionTypeEntity>> findAll() {
         List<SubscriptionTypeEntity> list = subscriptionTypeRepository.findAll();
         if (list.isEmpty()) {
             throw new IsEmptyException("Has no subscriptions type registered");
@@ -32,7 +36,7 @@ public class SubscriptionTypeEntityServiceImpl implements SubscriptionTypeEntity
     }
 
     @Override
-    public ResponseEntity<SubscriptionTypeEntity> findById(Long id){
+    public ResponseEntity<SubscriptionTypeEntity> findById(Long id) {
         var subscriptionTypeEntity = subscriptionTypeRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Subscription type", "id", id)
         );
@@ -41,29 +45,19 @@ public class SubscriptionTypeEntityServiceImpl implements SubscriptionTypeEntity
 
     @Override
     public ResponseEntity<SubscriptionTypeEntity> create(SubscriptionTypeDTO subscriptionTypeDTO) {
-        var subscriptionTypeEntity = SubscriptionTypeEntity.builder()
-                .name(subscriptionTypeDTO.name())
-                .accessMonths(subscriptionTypeDTO.accessMonths())
-                .price(subscriptionTypeDTO.price())
-                .productKey(subscriptionTypeDTO.productKey())
-                .build();
+        var subscriptionTypeEntity = SubscriptionTypeMapper.toEntity(subscriptionTypeDTO);
 
         subscriptionTypeRepository.save(subscriptionTypeEntity);
         return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionTypeEntity);
     }
 
-   @Override
+    @Override
     public ResponseEntity<SubscriptionTypeEntity> update(Long id, SubscriptionTypeUpdateDTO subscriptionTypeUpdateDTO) {
         var subscribeEntity = subscriptionTypeRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Subscription type", "id", id)
         );
-        var update = SubscriptionTypeEntity.builder()
-                .id(subscribeEntity.getId())
-                .name(subscriptionTypeUpdateDTO.name() != null ? subscriptionTypeUpdateDTO.name() : subscribeEntity.getName())
-                .accessMonths(subscriptionTypeUpdateDTO.accessMonths() != null ? subscriptionTypeUpdateDTO.accessMonths() : subscribeEntity.getAccessMonths())
-                .price(subscriptionTypeUpdateDTO.price() != null ? subscriptionTypeUpdateDTO.price() : subscribeEntity.getPrice())
-                .productKey(subscriptionTypeUpdateDTO.productKey() != null ? subscriptionTypeUpdateDTO.productKey() : subscribeEntity.getProductKey())
-                .build();
+        var update = SubscriptionTypeMapper.toEntity(subscriptionTypeUpdateDTO, subscribeEntity);
+        subscriptionTypeRepository.save(update);
         return ResponseEntity.status(HttpStatus.OK).body(update);
     }
 
@@ -75,5 +69,4 @@ public class SubscriptionTypeEntityServiceImpl implements SubscriptionTypeEntity
         subscriptionTypeRepository.deleteById(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
     }
-
 }
