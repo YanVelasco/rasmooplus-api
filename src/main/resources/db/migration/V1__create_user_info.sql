@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS users (
     phone VARCHAR(255) NOT NULL,
     cpf VARCHAR(255) NOT NULL,
     dt_subscription DATE NOT NULL,
-    dt_expiration DATE NOT NULL,
+    dt_expiration DATE,
     user_type_id INT,
     subscriptions_type_id INT,
     CONSTRAINT users_email_unique UNIQUE (email),
