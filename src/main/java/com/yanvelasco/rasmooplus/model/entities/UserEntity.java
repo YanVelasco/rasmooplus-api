@@ -1,10 +1,8 @@
 package com.yanvelasco.rasmooplus.model.entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -16,6 +14,7 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class UserEntity implements Serializable {
 
     @Serial
@@ -39,9 +38,11 @@ public class UserEntity implements Serializable {
     private String cpf;
 
     @Column(name = "dt_subscription", nullable = false)
-    private LocalDate dtSubscription = LocalDate.now();
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+    private LocalDate dtSubscription;
 
     @Column(name = "dt_expiration", nullable = false)
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate dtExpiration;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -51,5 +52,15 @@ public class UserEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subscriptions_type_id")
     private SubscriptionTypeEntity subscriptionType;
+
+    @PrePersist
+    public void prePersist() {
+        if (dtSubscription == null) {
+            dtSubscription = LocalDate.now();
+        }
+        if (dtExpiration == null) {
+            dtExpiration = dtSubscription.plusYears(1);
+        }
+    }
 
 }
