@@ -2,12 +2,14 @@ package com.yanvelasco.rasmooplus.model.services.impl;
 
 import com.yanvelasco.rasmooplus.exceptions.IsEmptyException;
 import com.yanvelasco.rasmooplus.exceptions.ResourceNotFoundException;
+import com.yanvelasco.rasmooplus.model.controllers.SubscriptionTypeController;
 import com.yanvelasco.rasmooplus.model.dto.SubscriptionTypeDTO;
 import com.yanvelasco.rasmooplus.model.dto.SubscriptionTypeUpdateDTO;
 import com.yanvelasco.rasmooplus.model.entities.SubscriptionTypeEntity;
 import com.yanvelasco.rasmooplus.model.mapper.SubscriptionTypeMapper;
 import com.yanvelasco.rasmooplus.model.repositories.SubscriptionTypeRepository;
 import com.yanvelasco.rasmooplus.model.services.SubscriptionTypeEntityService;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -32,6 +34,14 @@ public class SubscriptionTypeEntityServiceImpl implements SubscriptionTypeEntity
         if (list.isEmpty()) {
             throw new IsEmptyException("Has no subscriptions type registered");
         }
+
+        for (SubscriptionTypeEntity subscriptionType : list) {
+            subscriptionType.add(WebMvcLinkBuilder.linkTo(
+                    WebMvcLinkBuilder.methodOn(SubscriptionTypeController.class)
+                            .findById(subscriptionType.getId())).withSelfRel()
+            );
+        }
+
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }
 
@@ -40,12 +50,23 @@ public class SubscriptionTypeEntityServiceImpl implements SubscriptionTypeEntity
         var subscriptionTypeEntity = subscriptionTypeRepository.findById(id).orElseThrow(
                 () -> new ResourceNotFoundException("Subscription type", "id", id)
         );
+
+        subscriptionTypeEntity.add(WebMvcLinkBuilder.linkTo(
+               WebMvcLinkBuilder.methodOn(SubscriptionTypeController.class)
+                        .findById(id)).withSelfRel()
+        );
+
         return ResponseEntity.status(HttpStatus.OK).body(subscriptionTypeEntity);
     }
 
     @Override
     public ResponseEntity<SubscriptionTypeEntity> create(SubscriptionTypeDTO subscriptionTypeDTO) {
         var subscriptionTypeEntity = SubscriptionTypeMapper.toEntity(subscriptionTypeDTO);
+
+        subscriptionTypeEntity.add(WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(SubscriptionTypeController.class)
+                        .findById(subscriptionTypeEntity.getId())).withSelfRel()
+        );
 
         subscriptionTypeRepository.save(subscriptionTypeEntity);
         return ResponseEntity.status(HttpStatus.CREATED).body(subscriptionTypeEntity);
@@ -57,6 +78,12 @@ public class SubscriptionTypeEntityServiceImpl implements SubscriptionTypeEntity
                 () -> new ResourceNotFoundException("Subscription type", "id", id)
         );
         var update = SubscriptionTypeMapper.toEntity(subscriptionTypeUpdateDTO, subscribeEntity);
+
+        update.add(WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(SubscriptionTypeController.class)
+                        .findById(update.getId())).withSelfRel()
+        );
+
         subscriptionTypeRepository.save(update);
         return ResponseEntity.status(HttpStatus.OK).body(update);
     }

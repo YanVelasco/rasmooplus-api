@@ -13,11 +13,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("subscriptions-type")
-public class SubscriptionTypeEntityController {
+public class SubscriptionTypeController {
 
     private final SubscriptionTypeEntityService subscriptionTypeEntityService;
 
-    public SubscriptionTypeEntityController(SubscriptionTypeEntityServiceImpl subscriptionTypeEntityServiceImpl) {
+    public SubscriptionTypeController(SubscriptionTypeEntityServiceImpl subscriptionTypeEntityServiceImpl) {
         this.subscriptionTypeEntityService = subscriptionTypeEntityServiceImpl;
     }
 
