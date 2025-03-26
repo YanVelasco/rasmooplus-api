@@ -9,9 +9,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/users")
+@Tag(name = "User", description = "Endpoints for managing users")
 public class UserController {
 
     private final UserService userService;
@@ -21,6 +24,7 @@ public class UserController {
     }
 
     @PostMapping
+    @Operation(summary = "Create a new user", description = "Create a new user")
     public ResponseEntity<UserEntity> createUser(@RequestBody @Valid UserDTO userDTO) {
         return userService.createUser(userDTO);
     }
